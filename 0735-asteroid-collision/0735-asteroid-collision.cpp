@@ -1,29 +1,43 @@
 class Solution {
 public:
     vector<int> asteroidCollision(vector<int>& asteroids) {
-        int n = asteroids.size();
-        stack<int> stck;
-        for(int i=0; i<n; ++i){
+        stack<int> res;
+        
+
+        for(int i=0;i<asteroids.size();i++){
             if(asteroids[i] > 0)
-                stck.push(asteroids[i]);
-            else if(asteroids[i] < 0){
-                while(!stck.empty() && stck.top()>0 && stck.top()<abs(asteroids[i])){
-                    stck.pop();
+                res.push(asteroids[i]);
+            else if(asteroids[i]<0){
+                while(!res.empty() && res.top() > 0 && res.top()<abs(asteroids[i])){
+                    res.pop();
                 }
-                if(!stck.empty() && stck.top() == abs(asteroids[i]))
-                    stck.pop();
-                else if(stck.empty() || stck.top() < 0)
-                    stck.push(asteroids[i]);
+                if(!res.empty() && res.top() == abs(asteroids[i])){
+                    res.pop();
+                    continue;
+                }
+                if(!res.empty() && res.top()>abs(asteroids[i])){
+                    continue;
+                }
+                
             }
+            if(res.empty() || res.top()<0)
+                res.push(asteroids[i]);
+            
+        }
+        vector<int> result;
+
+        if(res.empty()){
+            return result;
         }
 
-        int m = stck.size();
-        vector<int> ans(m);
-        for(int i=m-1; i>=0; --i){
-            ans[i] = stck.top();
-            stck.pop();
+        while(!res.empty()) {
+            result.push_back(res.top());
+            res.pop();
         }
 
-        return ans;
+        
+        reverse(result.begin(), result.end());
+
+        return result;
     }
 };
